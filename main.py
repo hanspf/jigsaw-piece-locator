@@ -95,18 +95,8 @@ while True:
         
         img1 = cropped_piece.copy() # queryImage
         cv2.imshow("piece",img1)
-        #try:
-        #   f = open("keypoints.data", "rb")
-        #  datafile = f.read()
-        #  print("datafile found")
-        #  f.close()
-        #except IOError:
         #    # find the keypoints and descriptors with SIFT
         datafile = sift.detectAndCompute(img1,None)
-            #with open("keypoints.data", "wb") as binary_file:
-                # Write text or bytes to the file
-                #binary_file.write(bytearray(str(datafile)))
-            
         kp1, des1 = datafile
 
         
@@ -123,7 +113,7 @@ while True:
         good = []
         for m,n in matches:
         #     good.append(m)
-            if m.distance < 0.9*n.distance:
+            if m.distance < 0.8*n.distance:
                 good.append(m)
 
 
