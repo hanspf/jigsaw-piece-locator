@@ -12,6 +12,7 @@ contrast = 100
 focusvalue = 66
 
 
+
 cap = cv2.VideoCapture(0)
 
 cap.set(28, focusvalue)
@@ -34,12 +35,13 @@ cap.set(11, contrast   )
 #piece = cv2.imread('./test6.jpg')
 
 # Pre-process the piece
-def identify_contour(piece, threshold_low=150, threshold_high=255):
+def identify_contour(piece, threshold_low=160, threshold_high=255):
     """Identify the contour around the piece"""
     piece = cv2.cvtColor(piece, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(piece,(5,5),0)
 
-    ret, thresh = cv2.threshold(piece, threshold_low, threshold_high, 0)
+    ret, thresh = cv2.threshold(blur, threshold_low, threshold_high, 0)
+    cv2.imshow("thresh",thresh)
     image, contours, heirarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contour_sorted = np.argsort(map(cv2.contourArea, contours))
     return contours, contour_sorted[-2]
@@ -64,6 +66,7 @@ img2 = canvas.copy() # trainImage
 sift =  cv2.xfeatures2d.SIFT_create()
 print("detect on source image")
 kp2, des2 = sift.detectAndCompute(img2,None)
+
 
 while True:
   
@@ -140,7 +143,7 @@ while True:
             img2 = cv2.polylines(img2,[np.int32(dst)],True,255,3, cv2.LINE_AA)
 
         else:
-            print "Not enough matches are found - %d/%d" % (len(good),MIN_MATCH_COUNT)
+            print ("Not enough matches are found - %d/%d" % (len(good),MIN_MATCH_COUNT))
             matchesMask = None
 
         draw_params = dict(matchColor = (0,255,0), # draw matches in green color
@@ -151,7 +154,7 @@ while True:
         img3 = cv2.drawMatches(img1,kp1,img2,kp2,good,None,**draw_params)
         #cv2.imwrite('./solution.jpg', img3)
 
-        scale_percent = 30 # percent of original size
+        scale_percent = 40 # percent of original size
         width = int(img3.shape[1] * scale_percent / 100)
         height = int(img3.shape[0] * scale_percent / 100)
         dim = (width, height)
@@ -160,8 +163,10 @@ while True:
 
         cv2.imshow("result",resized)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(1000) & 0xFF == ord('q'):
         break
+    if cv2.waitKey(1000) & 0xFF == ord('r'):
+        img2 = canvas.copy() 
 
   
 
