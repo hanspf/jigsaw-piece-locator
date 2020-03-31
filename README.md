@@ -1,2 +1,4 @@
 # jigsaw-piece-locator
- test python and opencv image algorithm
+
+Testing image detection with OpenCV and Python.
+Needs configurable parameters
